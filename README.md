@@ -17,7 +17,7 @@ Python · OpenAI API · Pydantic
 
 ## Roadmap
 - [x] AI email classifier with validation
-- [ ] FastAPI endpoint called from n8n
+- [x] FastAPI endpoint called from n8n
 - [ ] RAG over help-centre docs (Qdrant)
 - [ ] LangGraph agent with human handoff
 - [ ] Docker + CI
