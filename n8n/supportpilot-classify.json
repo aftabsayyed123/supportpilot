@@ -1,0 +1,146 @@
+{
+  "name": "SupportPilot – Classify via API",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1f000e6a-e7f4-4bde-a639-61a58bf56d0d",
+      "name": "Start – Test Run"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1b1093ba-0ae7-492a-8463-c80132154d26",
+              "name": "email",
+              "value": "I was charged twice for order #4521. Refund me today or I'm calling my lawyer.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "94b946bb-78c9-4273-b6fe-d664021dece6",
+      "name": "Sample Customer Email"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/classify",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "27ff548c-0740-4bae-b16f-66c4f6b638d4",
+      "name": "Classify Email (SupportPilot API)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "75c29a0b-0ddc-4065-bcef-c7f6b0eaea02",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        0
+      ],
+      "id": "3c3b4173-9041-4fbe-b1c0-0b386acfa012",
+      "name": "Needs Human?"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start – Test Run": {
+      "main": [
+        [
+          {
+            "node": "Sample Customer Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Customer Email": {
+      "main": [
+        [
+          {
+            "node": "Classify Email (SupportPilot API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Email (SupportPilot API)": {
+      "main": [
+        [
+          {
+            "node": "Needs Human?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "5db2865c-57b4-4d15-8bc2-4681efed51fd",
+  "meta": {
+    "instanceId": "0fcd0c5de624ca880b7575e1161f27721767c2f3fa18d9b2052b8cd1d42d60d4"
+  },
+  "nodeGroups": [],
+  "id": "h2klF6XVbwhWahLK",
+  "tags": []
+}
