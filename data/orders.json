@@ -1,0 +1,6 @@
+[
+  {"order_id": "4521", "email": "ravi@example.com", "status": "shipped", "items": ["Wireless earbuds"], "total_inr": 2499, "shipped_on": "2026-10-20", "expected_delivery": "2026-10-24", "tracking_url": "https://track.novacart.example/4521"},
+  {"order_id": "4522", "email": "priya@example.com", "status": "processing", "items": ["Cotton bedsheet", "Pillow covers"], "total_inr": 1899, "shipped_on": null, "expected_delivery": "2026-10-30", "tracking_url": null},
+  {"order_id": "4523", "email": "arjun@example.com", "status": "delivered", "items": ["Running shoes"], "total_inr": 3999, "shipped_on": "2026-10-15", "expected_delivery": "2026-10-18", "tracking_url": "https://track.novacart.example/4523"},
+  {"order_id": "4524", "email": "sara@example.com", "status": "cancelled", "items": ["Smartwatch"], "total_inr": 5499, "shipped_on": null, "expected_delivery": null, "tracking_url": null}
+]
