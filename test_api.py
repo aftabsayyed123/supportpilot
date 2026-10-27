@@ -19,9 +19,9 @@ FAKE_ANSWER = Answer(
     answer="The address can only be changed before the order ships.",
     status="answered",
     needs_human=False,
+    reason="answered",
     sources=[Source(source="orders.md", section="Changing the delivery address", score=0.588)],
 )
-
 
 # ---------- /health ----------
 
