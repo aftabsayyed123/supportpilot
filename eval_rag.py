@@ -16,8 +16,10 @@ def check(case: dict, result) -> list[str]:
         return ["AI failed (the API would return 502)"]
 
     problems = []
-    if result.status != case["expected_status"]:
-        problems.append(f"status was '{result.status}', expected '{case['expected_status']}'")
+    expected = case["expected_status"]
+    allowed = expected if isinstance(expected, list) else [expected]
+    if result.status not in allowed:
+        problems.append(f"status was '{result.status}', expected one of {allowed}")
 
     expected_source = case.get("expected_source")
     if expected_source and expected_source not in [s.source for s in result.sources]:
@@ -26,6 +28,10 @@ def check(case: dict, result) -> list[str]:
     for options in case.get("must_include", []):
         if not contains_any(result.answer, options):
             problems.append(f"answer is missing one of {options}")
+
+    for options in case.get("must_not_include", []):
+        if contains_any(result.answer, options):
+            problems.append(f"answer must not contain any of {options}")
 
     return problems
 

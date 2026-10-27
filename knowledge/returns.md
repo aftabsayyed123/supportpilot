@@ -1,7 +1,9 @@
 # Returns and Refunds
 
 ## Return window
-Most items can be returned within 10 days of delivery if unused and in original packaging. Electronics have a 7-day return window. Personal care items cannot be returned.
+Most items can be returned within 10 days of delivery if unused and in original packaging.
+Electronics, such as phones, headphones, earbuds, smartwatches, chargers and speakers, have a 7-day return window.
+Personal care items, such as shampoo, soap, cosmetics, skincare, razors and toothbrushes, cannot be returned.
 
 ## Refund timing
 Refunds go to the original payment method within 5 to 7 business days after the returned item passes inspection. UPI refunds usually arrive within 2 business days.
