@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Literal, TypedDict
 
+import httpx
 from dotenv import load_dotenv
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
@@ -25,6 +26,10 @@ PLANNER_HISTORY = 6
 HANDOFF_LOG = Path("data/handoffs.csv")
 LOG_FIELDS = ["created_at", "ticket_id", "customer_id", "email", "customer_message", "review_action", "reply_sent"]
 EMAIL_PATTERN = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+
+TICKET_WEBHOOK_URL = os.getenv("TICKET_WEBHOOK_URL")
+TICKET_WEBHOOK_SECRET = os.getenv("TICKET_WEBHOOK_SECRET", "")
+WEBHOOK_TIMEOUT_SECONDS = 5
 
 HANDOFF_REPLY = (
     "I'm sorry about this. I'm passing your message to our support team, "
@@ -170,7 +175,7 @@ def join_sentences(first: str, second: str) -> str:
     return f"{first} {second}"
 
 
-def log_handoff(row: dict) -> None:
+def write_csv(row: dict) -> None:
     HANDOFF_LOG.parent.mkdir(parents=True, exist_ok=True)
     is_new_file = not HANDOFF_LOG.exists()
     with HANDOFF_LOG.open("a", newline="", encoding="utf-8") as file:
@@ -178,6 +183,28 @@ def log_handoff(row: dict) -> None:
         if is_new_file:
             writer.writeheader()
         writer.writerow(row)
+
+
+def send_to_webhook(row: dict) -> bool:
+    if not TICKET_WEBHOOK_URL:
+        return False
+    try:
+        response = httpx.post(
+            TICKET_WEBHOOK_URL,
+            json=row,
+            headers={"X-Webhook-Secret": TICKET_WEBHOOK_SECRET},
+            timeout=WEBHOOK_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+        return True
+    except httpx.HTTPError as error:
+        print(f"WARNING: ticket {row['ticket_id']} was not sent to n8n: {error}")
+        return False
+
+
+def log_handoff(row: dict) -> None:
+    write_csv(row)
+    send_to_webhook(row)
 
 
 def latest_question(state: SupportState) -> str:
